@@ -1,26 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { fetchJson, type Item } from "../lib/api";
 
-interface Item {
-    id: string;
-    name: string;
-}
-
-interface Container  {
+interface Container {
     id: string;
     color: string;
     name: string;
     description: string;
     items?: Item[];
 }
-
-const fetchJson = async <T,>(
-    url: string,
-    options?: RequestInit & { signal?: AbortSignal }
-): Promise<T> => {
-    const res = await fetch(url, options);
-    if (!res.ok) throw new Error(`Request failed: ${res.status}`);
-    return res.json() as Promise<T>;
-};
 
 const ContainerItem = React.memo(({ container, onRemove, onAddItem, disabled }: {
     container: Container;
@@ -121,7 +108,7 @@ const ContainerList = () => {
         try {
             await fetchJson<void>(`/api/containers/${id}`, { method: "DELETE" });
             setContainers((prev) => prev.filter((c) => c.id !== id));
-        } catch (err) {
+        } catch (err: unknown) {
             setError(err instanceof Error ? err.message : "Unknown error");
             throw err; // Пробрасываем ошибку в ContainerItem
         }
@@ -139,7 +126,7 @@ const ContainerList = () => {
             });
             updateContainer(containerId, (c) => ({ ...c, items: [...(c.items || []), newItem] }));
             return true;
-        } catch (err) {
+        } catch (err: unknown) {
             setError(err instanceof Error ? err.message : "Failed to add item");
             return false;
         }
@@ -149,12 +136,12 @@ const ContainerList = () => {
         const abortController = new AbortController();
         setIsLoading(true);
         fetchJson<Container[]>("/api/containers", { signal: abortController.signal })
-            .then(data => {
+            .then((data: Container[]) => {
                 // Гарантируем, что items является массивом при первой загрузке
-                setContainers(data.map(c => ({ ...c, items: c.items || [] })));
+                setContainers(data.map((c: Container) => ({ ...c, items: c.items || [] })));
             })
-            .catch(err => {
-                if (err.name !== "AbortError") setError(err.message);
+            .catch((err: unknown) => {
+                if (err instanceof Error && err.name !== "AbortError") setError(err.message);
             })
             .finally(() => setIsLoading(false));
         return () => abortController.abort();
