@@ -16,7 +16,6 @@ const CreateContainerForm = () => {
     validationSchema: Yup.object({
       name: Yup.string().required("Name is required"),
       color: Yup.string()
-        .matches(/^#([0-9A-F]{3}){1,2}$/i, "Invalid color hex")
         .required("Color is required"),
       description: Yup.string().required("Description is required"),
     }),
@@ -96,18 +95,18 @@ const CreateContainerForm = () => {
             htmlFor="color"
             className="block text-sm font-medium text-gray-700"
           >
-            Color (Hex)
+            Color (Choose the container color)
           </label>
           <input
             id="color"
-            type="text"
+            type="color"
             {...formik.getFieldProps("color")}
-            className={`w-full px-3 py-2 text-sm border rounded-md shadow-sm ${
+            className={`w-full h-10 px-0 py-0 text-sm border rounded-md shadow-sm overflow-hidden cursor-pointer ${
               formik.touched.color && formik.errors.color
                 ? "border-red-500"
                 : "border-input"
             }`}
-            placeholder="#FFA500"
+            title="Choose your container color"
           />
           {formik.touched.color && formik.errors.color && (
             <p className="text-sm text-red-500">{formik.errors.color}</p>

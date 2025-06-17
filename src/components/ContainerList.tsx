@@ -110,7 +110,7 @@ const ContainerList = () => {
             setContainers((prev) => prev.filter((c) => c.id !== id));
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : "Unknown error");
-            throw err; // Пробрасываем ошибку в ContainerItem
+            throw err; 
         }
     };
 
@@ -124,8 +124,14 @@ const ContainerList = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name: itemName, containerId }),
             });
-            updateContainer(containerId, (c) => ({ ...c, items: [...(c.items || []), newItem] }));
-            return true;
+
+            if (newItem) {
+                updateContainer(containerId, (c) => ({ ...c, items: [...(c.items || []), newItem] }));
+                return true;
+            } else {
+                setError("Failed to add item: Server returned no content.");
+                return false;
+            }
         } catch (err: unknown) {
             setError(err instanceof Error ? err.message : "Failed to add item");
             return false;
@@ -136,9 +142,10 @@ const ContainerList = () => {
         const abortController = new AbortController();
         setIsLoading(true);
         fetchJson<Container[]>("/api/containers", { signal: abortController.signal })
-            .then((data: Container[]) => {
-                // Гарантируем, что items является массивом при первой загрузке
-                setContainers(data.map((c: Container) => ({ ...c, items: c.items || [] })));
+            .then((data: Container[] | void) => {
+                if (data) {
+                    setContainers(data.map((c: Container) => ({ ...c, items: c.items || [] })));
+                }
             })
             .catch((err: unknown) => {
                 if (err instanceof Error && err.name !== "AbortError") setError(err.message);
