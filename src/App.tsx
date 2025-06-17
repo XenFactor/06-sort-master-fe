@@ -6,19 +6,19 @@ import Containers from "./pages/Containers";
 import CreateContainerForm from "./components/CreateContainerForm";
 
 function App() {
-  return (
-    <div>
-      <nav></nav>
-      <Layout>
-        <Routes>
-          <Route index element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/containers" element={<Containers />} />
-          <Route path="/container-form" element={<CreateContainerForm />} />
-        </Routes>
-      </Layout>
-    </div>
-  );
+    return (
+        <div>
+            <nav></nav>
+            <Layout>
+                <Routes>
+                    <Route index element={<Home />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/containers" element={<Containers />} />
+                    <Route path="/container-form" element={<CreateContainerForm />} />
+                </Routes>
+            </Layout>
+        </div>
+    );
 }
 
 export default App;
