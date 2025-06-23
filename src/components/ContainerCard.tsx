@@ -1,6 +1,7 @@
 import type Container from "../common/types/Container";
 import CreateItemForm from "./CreateItemForm";
 import type {Item} from "../lib/api.ts";
+import React from "react";
 
 interface Props {
     container: Container;
@@ -8,7 +9,8 @@ interface Props {
     onItemAdded?: (item: Item) => void;
 }
 
-export default function ContainerCard({ container, onRemove, onItemAdded }: Props) {
+
+function ContainerCard({ container, onRemove, onItemAdded }: Props) {
     return (
         <div className="mb-6 p-4 rounded-lg shadow-md text-white"
              style={{ backgroundColor: container.color }}>
@@ -41,3 +43,5 @@ export default function ContainerCard({ container, onRemove, onItemAdded }: Prop
         </div>
     );
 }
+
+export default React.memo(ContainerCard);
