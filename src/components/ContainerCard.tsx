@@ -1,7 +1,8 @@
 import type Container from "../common/types/Container";
 import CreateItemForm from "./CreateItemForm";
-import type {Item} from "../lib/api.ts";
+import type { Item } from "../common/types/Item";
 import React from "react";
+import ItemList from "./ItemList.tsx";
 
 interface Props {
     container: Container;
@@ -28,13 +29,7 @@ function ContainerCard({ container, onRemove, onItemAdded }: Props) {
             </div>
 
 
-            {(container.items || []).length > 0 && (
-                <ul className="mt-2 text-sm list-disc list-inside text-white/90">
-                    {container.items!.map((item) => (
-                        <li key={item.id}>{item.name}</li>
-                    ))}
-                </ul>
-            )}
+            <ItemList items={container.items || []} />
 
             <CreateItemForm
                 containerId={container.id}
