@@ -36,7 +36,7 @@ export default function Header() {
             Items
           </Link>
           <Link
-            to="/container-form"
+            to="/add-container"
             className="text-sm font-medium text-gray-600 hover:text-black transition-colors"
           >
             Add container
