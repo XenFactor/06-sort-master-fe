@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import type Container from "../common/types/Container";
 import type { Item } from "../common/types/Item";
-import type { Advert } from "../common/types/Advert.ts";
 import AdvertCarousel from "../components/AdvertCarousel";
 import CreateAdvertForm from "../components/CreateAdvertForm.tsx";
-import { fetchJson } from "../lib/api.ts";
+import { useAdverts } from "../context/AdvertsContext";
 
 interface Result {
     item: string;
@@ -15,23 +14,9 @@ function Home() {
     const [filter, setFilter] = useState("");
     const [results, setResults] = useState<Result[]>([]);
     const [searchError, setSearchError] = useState<string | null>(null);
-    const [adverts, setAdverts] = useState<Advert[]>([]);
-    const [advertsError, setAdvertsError] = useState<string | null>(null);
+    const { adverts, error: advertsError, addAdvert, loading } = useAdverts();
 
-    // Fetch adverts on component mount
-    useEffect(() => {
-        fetchJson<Advert[]>("/api/advert")
-            .then((data) => {
-                setAdverts(data || []);
-            })
-            .catch((err) => {
-                setAdvertsError(err instanceof Error ? err.message : "Unknown error");
-                setAdverts([]); // Ensure adverts is an empty array on error
-            });
-    }, []);
-
-
-    // Handle search filtering
+    
     useEffect(() => {
         if (filter.trim() === "") {
             setResults([]);
@@ -59,8 +44,8 @@ function Home() {
         return () => clearTimeout(timeoutId);
     }, [filter]);
 
-    const handleAdvertCreated = (newAdvert: Advert) => {
-        setAdverts(prevAdverts => [newAdvert, ...prevAdverts]);
+    const handleAdvertCreated = (newAdvert: import("../common/types/Advert").Advert) => {
+        addAdvert(newAdvert);
     };
 
     return (
@@ -98,7 +83,11 @@ function Home() {
             <div className="mt-12">
                 <CreateAdvertForm onAdvertCreated={handleAdvertCreated} />
                 {advertsError && <p className="text-red-500 text-center my-4">Could not load adverts: {advertsError}</p>}
-                <AdvertCarousel adverts={adverts} />
+                {loading ? (
+                  <p className="text-center text-gray-500">Loading adverts...</p>
+                ) : (
+                  <AdvertCarousel adverts={adverts} />
+                )}
             </div>
         </>
     );

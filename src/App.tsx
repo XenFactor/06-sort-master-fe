@@ -7,20 +7,23 @@ import CreateContainerForm from "./components/CreateContainerForm";
 import Items from "./pages/Items";
 import ItemPage from "./pages/ItemPage.tsx";
 import EditAdvertPage from "./pages/EditAdvertPage.tsx";
+import { AdvertsProvider } from "./context/AdvertsContext";
 
 function App() {
     return (
-        <Layout>
-            <Routes>
-                <Route path="/" element={<Home/>}/>
-                <Route path="/about" element={<About/>}/>
-                <Route path="/containers" element={<Containers/>}/>
-                <Route path="/add-container" element={<CreateContainerForm/>}/>
-                <Route path="/items" element={<Items/>}/>
-                <Route path="/items/:id" element={<ItemPage/>}/>
-                <Route path="/edit-advert/:id" element={<EditAdvertPage/>}/>
-            </Routes>
-        </Layout>
+        <AdvertsProvider>
+            <Layout>
+                <Routes>
+                    <Route path="/" element={<Home/>}/>
+                    <Route path="/about" element={<About/>}/>
+                    <Route path="/containers" element={<Containers/>}/>
+                    <Route path="/add-container" element={<CreateContainerForm/>}/>
+                    <Route path="/items" element={<Items/>}/>
+                    <Route path="/items/:id" element={<ItemPage/>}/>
+                    <Route path="/edit-advert/:id" element={<EditAdvertPage/>}/>
+                </Routes>
+            </Layout>
+        </AdvertsProvider>
     );
 }
 
