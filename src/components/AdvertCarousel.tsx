@@ -29,7 +29,7 @@ export default function AdvertCarousel({ adverts }: AdvertCarouselProps) {
       {adverts.map((advert) => (
         <SwiperSlide key={advert.id}>
           <div className="bg-white rounded-lg shadow-md p-4 flex flex-col items-center max-w-md mx-auto">
-            <img src={advert.photo} alt={advert.title} className="w-full h-48 object-cover rounded mb-4" />
+            <img src={advert.photo} alt={advert.title} className="w-full h-48 object-contain rounded mb-4 bg-white" />
             <h3 className="text-lg font-semibold">{advert.title}</h3>
             <p className="text-gray-600 mt-1 text-center">{advert.description}</p>
           </div>
