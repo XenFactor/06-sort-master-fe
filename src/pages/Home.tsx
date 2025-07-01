@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type Container from "../common/types/Container";
 import type { Item } from "../common/types/Item";
 import type { Advert } from "../common/types/Advert.ts";
-import AdvertList from "../components/AdvertList";
+import AdvertCarousel from "../components/AdvertCarousel";
 import CreateAdvertForm from "../components/CreateAdvertForm.tsx";
 import { fetchJson } from "../lib/api.ts";
 
@@ -63,11 +63,6 @@ function Home() {
         setAdverts(prevAdverts => [newAdvert, ...prevAdverts]);
     };
 
-    const handleAdvertDeleted = (id: number) => {
-        setAdverts(prevAdverts => prevAdverts.filter(ad => ad.id !== id));
-    };
-
-
     return (
         <>
             <div className="p-6 max-w-xl mx-auto">
@@ -103,7 +98,7 @@ function Home() {
             <div className="mt-12">
                 <CreateAdvertForm onAdvertCreated={handleAdvertCreated} />
                 {advertsError && <p className="text-red-500 text-center my-4">Could not load adverts: {advertsError}</p>}
-                <AdvertList adverts={adverts} onDelete={handleAdvertDeleted} />
+                <AdvertCarousel adverts={adverts} />
             </div>
         </>
     );
